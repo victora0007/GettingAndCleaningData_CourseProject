@@ -1,4 +1,4 @@
-# GET THE DATA
+# Get the data
 # 1. Set working directory
 pathwd <- "D:/Documentos/Training/Coursera/GettingandCleaningData/CourseProject"
 old_wd <- getwd()
@@ -13,24 +13,46 @@ if (!file.exists("./data/Dataset.zip")) {
         unzip (zipfile = "./data/Dataset.zip", exdir = "./data")
 }
 
-# READ THE DATA
-# Read the labels files
+# Read the data
+# 1. Read the labels files
 training_lab <- read.table("./data/UCI HAR Dataset/train/y_train.txt", header = FALSE)
 test_lab <- read.table("./data/UCI HAR Dataset/test/y_test.txt", header = FALSE)
 activity_lab <- read.table("./data/UCI HAR Dataset/activity_labels.txt", header = FALSE)
 
-# Read the subject files
+# 2. Read the subject files
 training_sub <- read.table("./data/UCI HAR Dataset/train/subject_train.txt", header = FALSE)
 test_sub <- read.table("./data/UCI HAR Dataset/test/subject_test.txt", header = FALSE)
 
-# Read the features files
+# 3. Read the features files
 training_fea <- read.table("./data/UCI HAR Dataset/train/X_train.txt", header = FALSE)
 test_fea <- read.table("./data/UCI HAR Dataset/test/X_test.txt", header = FALSE)
 features <- read.table("./data/UCI HAR Dataset/features.txt", header = FALSE)
 
+# Merges the training and the test sets to create one data set.
+# 1. Merge the dataframes by rows
+dataFeatures <- rbind(training_fea, test_fea)
+dataLabels <- rbind(training_lab, test_lab)
+dataSubjects <- rbind(training_sub, test_sub)
 
-# Merges the training and the test sets to create one data set
-library(data.table)
-training_data <- data.table(id = training_lab, training_set)
-test_data <- data.table(id = test_lab, test_set)
-data_merge <- merge(training_data, test_data)
+# 2. Set column names to the dataframes
+names(dataFeatures) <- features$V2
+names(dataLabels) <- "Labels"
+names(dataSubjects) <- "Subjects"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
