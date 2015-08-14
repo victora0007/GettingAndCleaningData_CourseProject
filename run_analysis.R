@@ -39,20 +39,9 @@ names(dataFeatures) <- features$V2
 names(dataLabels) <- "Labels"
 names(dataSubjects) <- "Subjects"
 
+# 3. Combine all dataframes to create the "dataFinal" dataframe
+dataFinal <- cbind(dataFeatures, dataSubjects, dataLabels)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Extracts only the measurements on the mean and standard deviation for each measurement
+library(dplyr)
+cran <- tbl_df(dataFinal)
