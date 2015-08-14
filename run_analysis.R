@@ -26,7 +26,8 @@ test_sub <- read.table("./data/UCI HAR Dataset/test/subject_test.txt", header = 
 # 3. Read the features files
 training_fea <- read.table("./data/UCI HAR Dataset/train/X_train.txt", header = FALSE)
 test_fea <- read.table("./data/UCI HAR Dataset/test/X_test.txt", header = FALSE)
-features <- read.table("./data/UCI HAR Dataset/features.txt", header = FALSE)
+features <- read.table("./data/UCI HAR Dataset/features.txt", header = FALSE, 
+                       colClasses = "character")
 
 # Merges the training and the test sets to create one data set.
 # 1. Merge the dataframes by rows
@@ -43,5 +44,17 @@ names(dataSubjects) <- "Subjects"
 dataFinal <- cbind(dataFeatures, dataSubjects, dataLabels)
 
 # Extracts only the measurements on the mean and standard deviation for each measurement
+# 1. Filter dataframe "Features" wich name of variable V2 (measurements) match with
+#    mean or std
 library(dplyr)
+#-------------subDataFeatures <- filter(features, grepl("mean|std", V2))
 cran <- tbl_df(dataFinal)
+cran2 <- tbl_df(as.data.frame(features$V2))
+names(cran2) <- "FeaturesNames"
+subDataFeatures <- filter(cran2, grepl("mean|std", FeaturesNames))
+
+# 2. Subset the tbl "cran" by seleted names of Features
+cran3 <- select(cran, seq_along(subDataFeatures$FeaturesNames))
+
+
+
