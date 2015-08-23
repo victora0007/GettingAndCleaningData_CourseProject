@@ -50,11 +50,13 @@ str(dataFinal)
 # 1. Use dplyr package to convert the dataframe to a tbl
 library(dplyr)
 cran <- tbl_df(dataFinal)
+rm("dataFinal")
 valid_column_names <- make.names(names = names(cran), unique = TRUE, allow_ = TRUE)
 names(cran) <- valid_column_names
 
 # 2. Select only the columns that contains "mean" or "std" for each measurement
 cran2 <- select(cran, contains("mean"), contains("std"), Subjects, Activity)
+rm("cran")
 
 # 3. Check the structures of the tbl
 str(cran2)
@@ -62,9 +64,11 @@ str(cran2)
 # Uses descriptive activity names to name the activities in the data set
 # 1. Merges data frames
 mergedData <- merge(cran2, activity, by.x = "Activity", by.y = "V1")
+rm("cran2")
 
 # 2. Convert mergedData dataframe to tbl
 cran3 <-tbl_df(mergedData)
+rm("mergedData")
 cran3 <- rename(cran3, ActivityName = V2)
 # 3. Check the structures of the tbl
 str(cran3)
@@ -89,4 +93,11 @@ names(cran3) <- gsub("BodyBody", "Body", names(cran3))
 # 2. Check
 names(cran3)
 
+# Creates a second, independent tidy data set with the average of each variable 
+# for each activity and each subject.
+cran4 <- aggregate(.~ Subjects + ActivityName, cran3, mean)
+cran4 <- cran4[order(cran4$Subjects,cran4$ActivityName),]
+head(cran4, 30)
 
+# Data set as a txt file created with write.table() using row.name=FALSE
+write.table(cran4, file = "./data/tidydata.txt",row.name=FALSE)
